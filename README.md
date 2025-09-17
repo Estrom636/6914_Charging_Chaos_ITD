@@ -34,7 +34,7 @@ All code is java files. Only the java files are in here this is not everything n
 ### Other
 - ***PoseStorage***
   - This is for storing "*Position*" variables that where save as long as the robot is running. Stored data like Position, Aliance Color, Scoring Type, and more.
-- ***Hardware***
+- ***[Hardware](Other/Hardware.java)***
   - This is for setting all of the motors, servos, and sensor.
 - ***MecanumDrive***
   - This was not writen by me. This is from Road Runner.
