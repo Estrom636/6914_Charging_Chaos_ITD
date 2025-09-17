@@ -18,9 +18,11 @@ All code is java files. Only the java files are in here this is not everything n
   - This is for blue SPECIMEN auto.
   - clips SPECIMEN on HIGH CHAMBER | pushes one SAMPLE into OBSERVATION ZONE at the same time picks SPECIMEN off wall | clips SPECIMEN on HIGH CHAMBER | picks SPECIMEN off wall from in OBSERVATION ZONE | parks in OBSERVATION ZONE by extending intake
 - ***[BlueYellowV1](Autonomous/BlueYellowV1.java)***
-  - First version with failsafes. //TODO: write basic what does
+  - First version with failsafes.
+  - Still reinterpreting my code for pathing
 - ***[BlueYellowV2](Autonomous/BlueYellowV2.java)***
-  - First version with lift and chassis movement. //TODO: write basic what does
+  - First version with lift and chassis movement.
+  - Still reinterpreting my code for pathing
 - ***[BlueYellowV3](Autonomous/BlueYellowV3.java)***
   - Final Version && first version with Limelight alignment.
   - place SAMPLE in HIGH BASKET | pick up SAMPLE off middle SPIKE MARK | place SAMPLE in HIGH BASKET | pick up SAMPLE off inside SPIKE MARK | place SAMPLE in HIGH BASKET | pick up SAMPLE off wall SPIKE MARK | place SAMPLE in HIGH BASKET | park touching LOW RUNG
@@ -28,9 +30,11 @@ All code is java files. Only the java files are in here this is not everything n
   - This is for red SPECIMEN auto.
   - clips SPECIMEN on HIGH CHAMBER | pushes one SAMPLE into OBSERVATION ZONE at the same time picks SPECIMEN off wall | clips SPECIMEN on HIGH CHAMBER | picks SPECIMEN off wall from in OBSERVATION ZONE | parks in OBSERVATION ZONE by extending intake
 - ***[RedYellowV1](Autonomous/RedYellowV1.java)***
-  - First version with failsafes. //TODO: write basic what does
+  - First version with failsafes.
+  - Still reinterpreting my code for pathing
 - ***[RedYellowV2](Autonomous/RedYellowV2.java)***
-  - First version with lift and chassis movement. //TODO: write basic what does
+  - First version with lift and chassis movement.
+  - Still reinterpreting my code for pathing
 - ***[RedYellowV3](Autonomous/RedYellowV3.java)***
   - Final Version && first version with Limelight alignment.
   - place SAMPLE in HIGH BASKET | pick up SAMPLE off middle SPIKE MARK | place SAMPLE in HIGH BASKET | pick up SAMPLE off inside SPIKE MARK | place SAMPLE in HIGH BASKET | pick up SAMPLE off wall SPIKE MARK | place SAMPLE in HIGH BASKET | park touching LOW RUNG
