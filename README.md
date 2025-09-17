@@ -15,7 +15,8 @@ All code is java files. Only the java files are in here this is not everything n
 
 ### Autonomous
 - ***[BlueBlueV1](Autonomous/BlueBlueV1.java)***
-  - This is for blue specimen auto. //TODO: write basic what does
+  - This is for blue specimen auto.
+  - clips SPECIMEN on HIGH CHAMBER | pushes one SAMPLE into OBSERVATION ZONE at the same time picks SPECIMEN off wall | clips SPECIMEN on HIGH CHAMBER | picks SPECIMEN off wall from in OBSERVATION ZONE | parks in OBSERVATION ZONE by extending intake
 - ***[BlueYellowV1](Autonomous/BlueYellowV1.java)***
   - First version with failsafes. //TODO: write basic what does
 - ***[BlueYellowV2](Autonomous/BlueYellowV2.java)***
@@ -23,7 +24,8 @@ All code is java files. Only the java files are in here this is not everything n
 - ***[BlueYellowV3](Autonomous/BlueYellowV3.java)***
   - Final Version && first version with Limelight alignment. //TODO: write basic what does
 - ***[RedRedV1](Autonomous/RedRedV1.java)***
-  - This is for blue specimen auto. //TODO: write basic what does
+  - This is for blue specimen auto.
+  - clips SPECIMEN on HIGH CHAMBER | pushes one SAMPLE into OBSERVATION ZONE at the same time picks SPECIMEN off wall | clips SPECIMEN on HIGH CHAMBER | picks SPECIMEN off wall from in OBSERVATION ZONE | parks in OBSERVATION ZONE by extending intake
 - ***[RedYellowV1](Autonomous/RedYellowV1.java)***
   - First version with failsafes. //TODO: write basic what does
 - ***[RedYellowV2](Autonomous/RedYellowV2.java)***
