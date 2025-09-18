@@ -10,8 +10,6 @@ All code is java files. Only the java files are in here this is not everything n
   - This is the final version, Limelight mounted above intake for auto alignment.
 - ***[judging](TeleOp/judging.java)***
   - This was for during judging to be able to display the lights and there meaning.
-- ***[BlueLimFollow](TeleOp/BlueLimFollow.java)***
-  - This was for testing color tracking with LImelight to auto align for intake pick up.
 
 ### Autonomous
 - ***[BlueBlueV1](Autonomous/BlueBlueV1.java)***
