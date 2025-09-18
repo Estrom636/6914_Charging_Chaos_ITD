@@ -24,6 +24,7 @@ import java.sql.Driver;
 public class telOpV2 extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        //Initialize robot based on if there is a value stored in PoseStroage
         Hardware drive;
         if(PoseStorage.currentPose == null){
             drive = new Hardware(hardwareMap, new Pose2d(0, 0, 0));
@@ -32,12 +33,14 @@ public class telOpV2 extends LinearOpMode {
         }
 
 
+        //Initialize intake set position variables
         boolean intakExt = false;
         boolean intakLift = false;
         boolean intakIn = false;
         boolean intakOut = false;
 
 
+        //Initialize claw and lift arm set position variables
         boolean claw = false;
         boolean clawTog = false;
         boolean pickUp = true;
@@ -46,6 +49,7 @@ public class telOpV2 extends LinearOpMode {
         boolean liftPosOver = false;
 
 
+        
         boolean red = false;
         boolean blue = false;
         boolean yellow = false;
@@ -532,3 +536,4 @@ public class telOpV2 extends LinearOpMode {
         }
     }
 }
+
