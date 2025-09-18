@@ -49,7 +49,7 @@ public class telOpV2 extends LinearOpMode {
         boolean liftPosOver = false;
 
 
-        //Initialize light color variables
+        //Initialize color variables
         boolean red = false;
         boolean blue = false;
         boolean yellow = false;
@@ -170,6 +170,9 @@ public class telOpV2 extends LinearOpMode {
             //Driver One -> Drive and Intake
 
             //Drive
+            //robot-centric drive code
+            //slow robot down if intake is out, lift is above a set height or if robot is in wall pick up positions
+            //all have limelight to aim at SAMPLE added onto the rotation
             if(intakExt || (liftPosMM > 1500) || (pickUp && scoreTypTog && clawTog)){
                 drive.setDrivePowers(new PoseVelocity2d(
                         new Vector2d(
@@ -202,12 +205,15 @@ public class telOpV2 extends LinearOpMode {
             // Pick Color We Are
             aliColor = gamepad1.right_stick_button;
 
+            //alliance coor toggle
             if(aliColor && !oldAliColor){
                 aliColorTog = !aliColorTog;
             }
             oldAliColor = aliColor;
 
 
+            //setting telemetry color line
+            //and if other color is in intake auto eject
             if(!aliColorTog){
                 telemetry.addLine("We Are Blue");
                 if (red) {
@@ -226,26 +232,31 @@ public class telOpV2 extends LinearOpMode {
             }
 
             // intake Ext
+            //intake out if true
             if (gamepad1.right_bumper) {
                 intakExt = true;
             } else if (gamepad1.left_bumper) {
                 intakExt = false;
             }
+            //first value is when true
             drive.horizontal.setPosition(intakExt ? 0.2 : 0.6);
             drive.horizontal2.setPosition(intakExt ? 0.4 : 0.8);
 
             //intake Lift
+            //intake down if true [when clicked down intake is set to go in]
             if(gamepad1.dpad_up){
                 intakLift = false;
             }else if(gamepad1.dpad_down){
-                drive.limelight.captureSnapshot("IntakeDown" + PoseStorage.intakeCount++);
+                drive.limelight.captureSnapshot("IntakeDown" + PoseStorage.intakeCount++); //taking snapshot so you can go back later if needed to adjust values in limelight
                 intakLift = true;
                 intakIn = true;
             }
+            //first value is when true
             drive.intakeLift.setPosition(intakLift ? 0.98 : 0.48);
             drive.intakeLift2.setPosition(intakLift ? 0.98 : 0.48);
 
             //intake wheels
+            //setting intake wheel directions
             if(gamepad1.y){
                 intakIn = false;
                 intakOut = false;
@@ -257,26 +268,32 @@ public class telOpV2 extends LinearOpMode {
                 intakOut = true;
             }
 
+            //auto intake up and in if a SAMPLE is in the intake
             if((drive.inCol.red() > 200 || drive.inCol.blue() > 200) && drive.intakeLift.getPosition() != 1){
                 intakIn = false;
                 intakLift = false;
+                //SPECIMEN is score type dont retract
                 if(drive.intakeLift.getPosition() == .48 && !scoreTypTog){
                     sleep(20);
                     intakExt = false;
                 }
             }
 
+            //different transfer types
             if(drive.transfer.getDistance(DistanceUnit.MM) < 80){
+                //SAMPLE in transfer locations -> stop all
                 drive.inRight.setPower(0);
                 drive.inLeft.setPower(0);
                 intakIn = false;
                 intakOut = false;
                 drive.intakeLight.setPosition(0);
             }else if(!scoreTypTog && drive.intakeLift.getPosition() == 0.48 && drive.horizontal.getPosition() == 0.6 && drive.transfer.getDistance(DistanceUnit.MM) > 135 && drive.transfer.getDistance(DistanceUnit.MM) < 150){
+                //SAMPLE is in position to go into transfer location -> eject SAMPLE into transfer location
                 drive.inRight.setPower(.75);
                 drive.inLeft.setPower(-.75);
                 drive.intakeLight.setPosition(0);
             }else if (intakOut) {
+                //set intake out -> wheels out, intake light off, and reset color values
                 drive.inRight.setPower(1);
                 drive.inLeft.setPower(-1);
                 drive.intakeLight.setPosition(0);
@@ -284,10 +301,12 @@ public class telOpV2 extends LinearOpMode {
                 blue = false;
                 red = false;
             } else if(intakIn){
+                //set intake in -> wheels in, and intake light on
                 drive.inRight.setPower(-1);
                 drive.inLeft.setPower(1);
                 drive.intakeLight.setPosition(0.3);//TODO Light Control
             }else{
+                //intake is off
                 drive.inRight.setPower(0);
                 drive.inLeft.setPower(0);
                 drive.intakeLight.setPosition(0);
@@ -549,6 +568,7 @@ public class telOpV2 extends LinearOpMode {
         }
     }
 }
+
 
 
 
