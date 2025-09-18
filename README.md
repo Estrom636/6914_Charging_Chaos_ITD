@@ -1,5 +1,5 @@
 # 6914 Charging Chaos Into The Deep Season Code
-All code is java files. Only the java files are in here this is not everything need for a FTC robot
+All code is java files. Only the java files are in here this is not everything need for a FTC robot. Only final versions will be commented.
 
 ## Code List
 
