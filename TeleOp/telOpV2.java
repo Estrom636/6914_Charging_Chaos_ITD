@@ -49,44 +49,52 @@ public class telOpV2 extends LinearOpMode {
         boolean liftPosOver = false;
 
 
-        
+        //Initialize light color variables
         boolean red = false;
         boolean blue = false;
         boolean yellow = false;
 
 
+        //Initialize lift variables
         int liftPos = 0;
         int liftPosMM = 0;
         double proportionUp = 0.1;
         double proportionDown = 0.1;
 
-        boolean aliColor = false;
+        //Initialize aliance color toggle variables
+        boolean aliColor = false; //true = red, false = blue
         boolean oldAliColor = false;
         boolean aliColorTog = PoseStorage.aliCol;
 
+        //Initialize limelight active toggle variables
         boolean limeL = false;
         boolean oldlimeL = false;
         boolean limeLTog = false;
 
-        boolean scoreTyp = false;
+        //Initialize scoreing type toggle variables
+        boolean scoreTyp = false; //true = SPECIMEN, false = SAMPLE
         boolean oldScoreTyp = false;
-        boolean scoreTypTog = PoseStorage.scoreType;
+        boolean scoreTypTog = PoseStorage.scoreType; //importing from PoseStorage
 
 
+        //Initialize end game hang toggle variables
         boolean hang = false;
         boolean oldHang = false;
         boolean hangTog = false;
         boolean allOff = false;
 
+        //Initialize limelight data variables
         double tx = 0;
         double ty = 0;
         double ta = 0;
 
 
+        //Setting LED colors
         drive.lightLeft.setPosition(0.5);
         drive.lightRight.setPosition(0.5);
         drive.intakeLight.setPosition(0);
 
+        //Starting limelight
         drive.limelight.start();
         drive.limelight.pipelineSwitch(3);
 
@@ -536,4 +544,5 @@ public class telOpV2 extends LinearOpMode {
         }
     }
 }
+
 
