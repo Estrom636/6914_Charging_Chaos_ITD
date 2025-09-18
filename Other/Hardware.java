@@ -16,8 +16,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 
 public class Hardware extends MecanumDrive{
-    //Declaring robot components (Motors, servos, and sensors)
-    //public [component type] [component name]
 
     public DcMotorEx leftFront, leftBack, rightBack, rightFront, liftLeft, liftRight;
 
@@ -35,11 +33,8 @@ public class Hardware extends MecanumDrive{
 
     public Limelight3A limelight;
 
-    //Initialize the robot overall
     public Hardware(HardwareMap hardwareMap, Pose2d pose) {
-        //Initialize call to mecanumDrive (Road Runner)
         super(hardwareMap, pose);
-        //Initialize the components
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
         leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
@@ -78,4 +73,5 @@ public class Hardware extends MecanumDrive{
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
     }
 }
+
 
