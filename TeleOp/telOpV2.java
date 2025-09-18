@@ -114,6 +114,7 @@ public class telOpV2 extends LinearOpMode {
             //telemetry.addData("Left", drive.lBack.getDistance(DistanceUnit.MM));
             //telemetry.addData("Right", drive.rBack.getDistance(DistanceUnit.MM));
 
+            //setting limelight pipeline based on alliance color and scoring type
             if(!aliColorTog && scoreTypTog){
                 //blue
                 drive.limelight.pipelineSwitch(0);
@@ -131,11 +132,13 @@ public class telOpV2 extends LinearOpMode {
             //Limelight
             limeL = gamepad1.a;
 
+            //toggle for limelight
             if(limeL && !oldlimeL){
                 limeLTog = !limeLTog;
             }
             oldlimeL = limeL;
 
+            //getting and setting limelight data to variables if limelight see data
             LLResult result = drive.limelight.getLatestResult();
             if (result != null && result.isValid()) {
                 tx = result.getTx();
@@ -152,6 +155,7 @@ public class telOpV2 extends LinearOpMode {
                 telemetry.addData("Limelight", "No Targets");
             }
 
+            //reset the limelight variables if active limelight is turned off
             if(!limeLTog){
                 tx = 0;
                 ty = 0;
@@ -159,6 +163,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
 
+            //updateing robot position with Road Runner and saving it to PoseStorage
             drive.updatePoseEstimate();
             PoseStorage.currentPose = drive.pose;
 
@@ -544,5 +549,6 @@ public class telOpV2 extends LinearOpMode {
         }
     }
 }
+
 
 
