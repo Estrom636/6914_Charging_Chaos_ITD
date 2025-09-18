@@ -10,11 +10,13 @@ public class judging extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Hardware drive = new Hardware(hardwareMap, new Pose2d(0, 0, 0));
 
+        //variables for toggling through colors
         boolean color = false;
         boolean colorTog = false;
         boolean oldcolor = false;
         int colorCycle = 0;
 
+        //not used
         double coLor = 0.3;
         boolean up = true;
 
@@ -22,8 +24,10 @@ public class judging extends LinearOpMode {
         resetRuntime();
 
         while(!isStopRequested()){
+            //to get button on controller
             color = gamepad1.a;
 
+            //toggle to increase what color id displaed
             if(color && !oldcolor){
                 colorTog = !colorTog;
                 colorCycle++;
@@ -33,6 +37,7 @@ public class judging extends LinearOpMode {
             }
             oldcolor = color;
 
+            //ifs to display color based on number in cycle
             if(colorCycle == 0){
                 //no color
                 drive.lightLeft.setPosition(0);
@@ -59,4 +64,5 @@ public class judging extends LinearOpMode {
             }
         }
     }
+
 }
