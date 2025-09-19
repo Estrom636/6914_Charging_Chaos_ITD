@@ -205,7 +205,7 @@ public class telOpV2 extends LinearOpMode {
             // Pick Color We Are
             aliColor = gamepad1.right_stick_button;
 
-            //alliance coor toggle
+            //alliance color toggle
             if(aliColor && !oldAliColor){
                 aliColorTog = !aliColorTog;
             }
@@ -318,12 +318,14 @@ public class telOpV2 extends LinearOpMode {
             if(gamepad2.a) drive.limelight.captureSnapshot("Manual" + PoseStorage.snapCount++);
 
             //Claw
+            //claw toggle
             if (gamepad2.right_bumper && !claw) {
                 clawTog = !clawTog;
             }
 
             claw = gamepad2.right_bumper;
 
+            //open : closed
             drive.claw.setPosition(clawTog ? 0.45 : 0.8);
 
             //Lift Arm Pos override rest
@@ -332,6 +334,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
             // Pick Up
+            //set varible for hold position
             if (gamepad2.dpad_down) {
                 liftPosOver = true;
                 pickUp = true;
@@ -341,12 +344,15 @@ public class telOpV2 extends LinearOpMode {
 
 
             // Internal Pick Up
+            //pick up from interal transfer position
             if (pickUp && !scoreTypTog) {
+                //close claw to move between lifts
                 if (drive.liftLeftS.getPosition() <= 0.6) {
                     clawTog = false;
                     drive.claw.setPosition(0.8);
                     sleep(25);
                 }
+                //only allow SAMPLE pick up when in transfer position and auto close when down
                 if (gamepad2.dpad_left && (drive.transfer.getDistance(DistanceUnit.MM) < 90 || drive.transfer.getDistance(DistanceUnit.MM) > 1000)) {
                     drive.liftLeftS.setPosition(0.975);
                     drive.liftRightS.setPosition(0.95);
@@ -362,6 +368,7 @@ public class telOpV2 extends LinearOpMode {
 
 
             // External Pick Up
+            //pick up from off of wall -> hold position
             if (pickUp && scoreTypTog && !wall) {
                     clawTog = false;
                     drive.claw.setPosition(0.8);
@@ -370,12 +377,14 @@ public class telOpV2 extends LinearOpMode {
                 drive.liftRightS.setPosition(0.65);
             }
 
+            //set varible for wall pick up
             if (gamepad2.dpad_left) {
                 liftPosOver = true;
                 pickUp = true;
                 scorePos = false;
                 wall = true;
             }
+            //pick up from off of wall -> wall position
             if (wall && scoreTypTog) {
                 if (drive.liftLeftS.getPosition() >= 0.9) {
                     clawTog = false;
@@ -389,6 +398,7 @@ public class telOpV2 extends LinearOpMode {
             // Scoring Type Selection
             scoreTyp = gamepad2.right_stick_button;
 
+            //score type toggle
             if (scoreTyp && !oldScoreTyp) {
                 scoreTypTog = !scoreTypTog;
             }
@@ -397,6 +407,7 @@ public class telOpV2 extends LinearOpMode {
             telemetry.addLine(scoreTypTog ? "Specimens" : "Samples");
 
             // Score Location
+            //set variables for scoring position
             if (gamepad2.dpad_right || (liftPos >= 2500 && !liftPosOver)) {
                 liftPosOver = true;
                 scorePos = true;
@@ -405,6 +416,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
             // Basket
+            //basket position for scoring
             if (scorePos && !scoreTypTog) {
                 if (drive.liftLeftS.getPosition() >= 0.9) {
                     clawTog = false;
@@ -413,6 +425,7 @@ public class telOpV2 extends LinearOpMode {
                 }
                 drive.liftLeftS.setPosition(0.20);
                 drive.liftRightS.setPosition(0.80);
+                //reset color variables when claw opens
                 if (claw) {
                     yellow = false;
                     blue = false;
@@ -421,6 +434,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
             // Chamber
+            //chamber position for scoring
             if (scorePos && scoreTypTog) {
                 if (drive.liftLeftS.getPosition() >= 0.9) {
                     clawTog = false;
@@ -432,6 +446,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
             //Lift Run Driver
+            //control lift right trigger up, left trigger down [only when in or under lift height]
             if(gamepad2.right_trigger > 0 && liftPos < 2900){
                 drive.liftRight.setPower(gamepad2.right_trigger * proportionUp);
                 drive.liftLeft.setPower(-gamepad2.right_trigger * proportionUp);
@@ -439,6 +454,7 @@ public class telOpV2 extends LinearOpMode {
                 drive.liftRight.setPower(-gamepad2.left_trigger * proportionDown);
                 drive.liftLeft.setPower(gamepad2.left_trigger * proportionDown);
             }else if(!gamepad2.a){
+                //gamepad2 button a was never used for this other than limelight snapshot
                 drive.liftRight.setPower(.001);
                 drive.liftLeft.setPower(-.001);
             }
@@ -446,22 +462,26 @@ public class telOpV2 extends LinearOpMode {
 
             hang = gamepad2.left_bumper;
 
+            //hand hold toggle
             if(hang && !oldHang){
                 hangTog = !hangTog;
             }
             oldHang = hang;
 
 
+            //hang hold while loop
             double color = 0.3;
             boolean up = true;
             while(hangTog){
                 hang = gamepad2.left_bumper;
 
+                //toggle in while loop
                 if(hang && !oldHang){
                     hangTog = !hangTog;
                 }
                 oldHang = hang;
 
+                //used to cycle through all color on LEDs
                 if(up && color > 0.7){
                     up = false;
                 }
@@ -469,6 +489,7 @@ public class telOpV2 extends LinearOpMode {
                     up = true;
                 }
 
+                //used to cycle through all color on LEDs
                 if(up){
                     color += .001;
                 }
@@ -476,9 +497,11 @@ public class telOpV2 extends LinearOpMode {
                     color -= .001;
                 }
 
+                //set LED colors in opposite pattern
                 drive.lightRight.setPosition(0 + color);
                 drive.lightLeft.setPosition(1 - color);
 
+                //setting motors to hold value and turn off intake wheels
                 drive.liftRight.setPower(-0.005);
                 drive.liftLeft.setPower(0.005);
                 drive.inLeft.setPower(0);
@@ -486,6 +509,7 @@ public class telOpV2 extends LinearOpMode {
             }
 
             //lift pos Stuff
+            //convert lift motor encoder value to height in mm
             liftPos = ((drive.liftLeft.getCurrentPosition() * -1) + drive.liftRight.getCurrentPosition()) / 2;
             liftPosMM = (int) (liftPos * 0.823);
             if(scoreTypTog){
@@ -494,6 +518,7 @@ public class telOpV2 extends LinearOpMode {
                 proportionUp = (double) (2900 - liftPos) * .001;
             }
             proportionDown = (double) (liftPos) * .1;
+            //to reset the motor encoder on the lift motors
             if((drive.leftT.isPressed() || drive.rightT.isPressed()) && gamepad2.right_trigger == 0 && gamepad2.left_trigger == 0){
                 drive.liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 drive.liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -509,22 +534,27 @@ public class telOpV2 extends LinearOpMode {
             // Set Current Color
             //telemetry.addData("red", drive.inCol.red());
             //telemetry.addData("blue", drive.inCol.blue());
+            //reads intake color sensor and sets color variable based on that
             if(drive.inCol.red() > 1600 && drive.inCol.blue() > 450){
+                //yellow
                 yellow = true;
                 blue = false;
                 red = false;
                // limeLTog = false;
             } else if (drive.inCol.red() > 900 && drive.inCol.blue() < 300) {
+                //red
                 red = true;
                 blue = false;
                 yellow = false;
                 //limeLTog = false;
             } else if (drive.inCol.blue() > 950) {
+                //blue
                 blue = true;
                 red = false;
                 yellow = false;
                 //limeLTog = false;
             }
+            // to manually reset the values
             if(gamepad2.left_stick_button){
                 blue = false;
                 red = false;
@@ -533,12 +563,13 @@ public class telOpV2 extends LinearOpMode {
 
 
             //Light Control
+            //set robot LEDs based on other variables
             if (!(tx == 0 && ty == 0 && ta == 0) && limeLTog) {
-                //Green
+                //Green -> limelight active and sees data
                 drive.lightLeft.setPosition(0.5);
                 drive.lightRight.setPosition(0.5);
             } else if ((drive.leftT.isPressed() || drive.rightT.isPressed()) && (drive.transfer.getDistance(DistanceUnit.MM) < 90) && (drive.claw.getPosition() == 0.45)) {
-                //Purple
+                //Purple -> robot ready to transfer = lift fully down, SAMPLE in transfer position, and claw is open
                 drive.lightLeft.setPosition(0.722);
                 drive.lightRight.setPosition(0.722);
             } else {
@@ -558,16 +589,27 @@ public class telOpV2 extends LinearOpMode {
                     drive.lightLeft.setPosition(0.611);
                     drive.lightRight.setPosition(0.611);
                 } else {
+                    //value if nothing else active
                     drive.lightLeft.setPosition(1);
                     drive.lightRight.setPosition(1);
                 }
             }
+            /*
+              Priority order of colors
+              1. Green
+              2. Purple
+              3. Yellow
+              4. Red
+              5. Blue
+              6. White
+            */
 
             telemetry.addData("Dist Sensor: ", drive.transfer.getDistance(DistanceUnit.MM));
             telemetry.update();
         }
     }
 }
+
 
 
 
