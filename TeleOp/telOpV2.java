@@ -238,7 +238,7 @@ public class telOpV2 extends LinearOpMode {
             } else if (gamepad1.left_bumper) {
                 intakExt = false;
             }
-            //first value is when true
+            //intake out : intake in
             drive.horizontal.setPosition(intakExt ? 0.2 : 0.6);
             drive.horizontal2.setPosition(intakExt ? 0.4 : 0.8);
 
@@ -251,7 +251,7 @@ public class telOpV2 extends LinearOpMode {
                 intakLift = true;
                 intakIn = true;
             }
-            //first value is when true
+            //intake down : intake up
             drive.intakeLift.setPosition(intakLift ? 0.98 : 0.48);
             drive.intakeLift2.setPosition(intakLift ? 0.98 : 0.48);
 
@@ -609,6 +609,7 @@ public class telOpV2 extends LinearOpMode {
         }
     }
 }
+
 
 
 
