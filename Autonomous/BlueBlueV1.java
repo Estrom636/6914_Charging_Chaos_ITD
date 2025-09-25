@@ -22,31 +22,40 @@ public class BlueBlueV1 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Hardware drive = new Hardware(hardwareMap, new Pose2d(-8.25, 64, Math.PI/2));
 
+        //Setting Pose Storage Variables
         PoseStorage.aliCol = false;
         PoseStorage.scoreType = true;
 
+        //Setting intake inizalization position
         drive.intakeLift.setPosition(0.8);
         drive.intakeLift2.setPosition(0.8);
         drive.horizontal.setPosition(0.6);
         drive.horizontal2.setPosition(0.8);
 
+        //Setting lift arm inizalization position
         drive.liftLeftS.setPosition(0.6);
         drive.liftRightS.setPosition(1);
 
+        //Setting claw inizalization position
         drive.claw.setPosition(.8);
 
+        //setting the LED colors
         drive.lightRight.setPosition(0.611);
         drive.lightLeft.setPosition(0.611);
         drive.intakeLight.setPosition(0);
 
+        //creating the fail safe variable
         boolean pickUpFail;
 
+        //Createing and starting limelight
         drive.limelight.start();
         drive.limelight.pipelineSwitch(0);
         drive.limelight.deleteSnapshots();
         LLResult result;
         drive.limelight.start();
 
+        //Checking if limelight is reading data
+        //This is check by just holding a sample infront of the camera
         while(!isStarted()){
             result = drive.limelight.getLatestResult();
             if (result != null && result.isValid()) {
@@ -59,9 +68,11 @@ public class BlueBlueV1 extends LinearOpMode {
         }
 
 
+        //reset the lift motor encoders
         drive.liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         drive.liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        //this is to wait till the start button on the driver station is pressed
         waitForStart();
 
         drive.liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -321,4 +332,5 @@ public class BlueBlueV1 extends LinearOpMode {
 
         PoseStorage.currentPose = drive.pose;
     }
+
 }
