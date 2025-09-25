@@ -48,7 +48,7 @@ public class BlueBlueV1 extends LinearOpMode {
         //creating the fail safe variable
         boolean pickUpFail;
 
-        //Createing and starting limelight
+        //Create and starting limelight
         drive.limelight.start();
         drive.limelight.pipelineSwitch(0);
         drive.limelight.deleteSnapshots();
@@ -395,4 +395,5 @@ public class BlueBlueV1 extends LinearOpMode {
     }
 
 }
+
 
