@@ -159,14 +159,22 @@ public class BlueYellowV3 extends LinearOpMode {
             drive.intakeLift.setPosition(0.98);
             drive.intakeLift2.setPosition(0.98);
 
+            //reset the check variables
             liftDown = false;
             intakeIn = false;
+            //get the start time for intaking
             double startTime4 = getRuntime();
+            //while for lowering the lift and intaking the sample from the ground
             while ((!liftDown || !intakeIn) && !liftFail && !intakeMiss1) {
+                //if sets a time limit for picking up and lowering the lift
                 if (getRuntime() - startTime4 > 2) {
+                    //if the time is longer then 2 seconds
+                    //check if lift is still up if yes then set liftFail to true
                     if (!liftDown) {
                         liftFail = true;
                     }
+                    //check if the intake is in meaning the nothing has been picked up
+                    //if yes set intakeMiss1 to true, stop movement, lift and retract intake, and then move back to basket scoring location
                     if (!intakeIn) {
                         intakeMiss1 = true;
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
@@ -183,6 +191,8 @@ public class BlueYellowV3 extends LinearOpMode {
                         );
                     }
                 } else {
+                    //if the time is less then 2 seconds
+                    //move lift all the way down then open claw and set liftDown to true
                     if (!drive.rightT.isPressed() && !drive.leftT.isPressed()) {
                         drive.liftRight.setPower(-1);
                         drive.liftLeft.setPower(1);
@@ -194,19 +204,26 @@ public class BlueYellowV3 extends LinearOpMode {
                     }
 
                     if (!(drive.inCol.red() > 200 || drive.inCol.blue() > 200)) {
+                        //if color sensor does not read color
+                        //get limelight data and check and set it
                         result = drive.limelight.getLatestResult();
                         if (result != null && result.isValid()) {
                             drive.lightRight.setPosition(0.5);
                             drive.lightLeft.setPosition(0.5);
-                            tx = result.getTx() / 27.25;
+                            tx = result.getTx() / 27.25; //dividing by the angle to turn into a decimal value
                         } else {
                             tx = 0;
                         }
+                        //set intake wheel to pull in
                         drive.inRight.setPower(-1);
                         drive.inLeft.setPower(1);
+                        //move forward with changing the angle based in the limelight value
+                        //update the position in poseition storage
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0.25, 0), tx * 0.3));
                         drive.updatePoseEstimate();
                     } else {
+                        //if something is in the intake
+                        //stop all movement, lift and retract intake, and set intakeIn to true
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
                         drive.inRight.setPower(0);
                         drive.inLeft.setPower(0);
@@ -218,8 +235,11 @@ public class BlueYellowV3 extends LinearOpMode {
                     }
                 }
             }
+            //update the position in poseition storage
             PoseStorage.currentPose = drive.pose;
 
+            //setting LED colors
+            //blue and yellow
             drive.lightRight.setPosition(0.611);
             drive.lightLeft.setPosition(0.388);
 
@@ -802,5 +822,6 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
 
