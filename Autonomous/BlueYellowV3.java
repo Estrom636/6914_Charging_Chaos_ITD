@@ -21,30 +21,39 @@ public class BlueYellowV3 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Hardware drive = new Hardware(hardwareMap, new Pose2d(32, 64, Math.PI));
 
+        //Setting Pose Storage Variables
         PoseStorage.aliCol = false;
         PoseStorage.scoreType = false;
 
+        //Setting intake inizalization position
         drive.intakeLift.setPosition(0.8);
         drive.intakeLift2.setPosition(0.8);
         drive.horizontal.setPosition(0.6);
         drive.horizontal2.setPosition(0.8);
 
+        //Setting lift arm inizalization positions
         drive.liftLeftS.setPosition(0.6);
         drive.liftRightS.setPosition(1);
 
+        //Setting claw inizalization position
         drive.claw.setPosition(.8);
 
+        //Setting the LED colors
+        //blue, yellow, and off
         drive.lightRight.setPosition(0.611);
         drive.lightLeft.setPosition(0.388);
         drive.intakeLight.setPosition(0);
 
+        //reset lift encoders
         drive.liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         drive.liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
+        //Creating check variables for fail safes
         boolean liftDown = false;
         boolean intakeIn = false;
 
+        //Creating fail safe variables
         boolean liftFail = false;
         boolean transferFail = false;
         boolean intakeMiss1 = false;
@@ -52,6 +61,7 @@ public class BlueYellowV3 extends LinearOpMode {
         boolean intakeMiss3 = false;
         boolean intakeMiss4 = false;
 
+        //Create and starting limelight
         drive.limelight.start();
         drive.limelight.pipelineSwitch(3);
         drive.limelight.deleteSnapshots();
@@ -59,6 +69,8 @@ public class BlueYellowV3 extends LinearOpMode {
         double tx = 0.0;
         drive.limelight.start();
 
+        //Checking if limelight is reading data
+        //This is check by just holding a sample infront of the camera
         while(!isStarted()){
             result = drive.limelight.getLatestResult();
             if (result != null && result.isValid()) {
@@ -70,20 +82,27 @@ public class BlueYellowV3 extends LinearOpMode {
             }
         }
 
+        //This is to wait till the start button on the driver station is pressed
         waitForStart();
+        //Reset run time to zero because it is used for timing
         resetRuntime();
 
         //PreLoad
 
+        //reset lift encoders
         drive.liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         drive.liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //lift arm to prescore position
         drive.liftLeftS.setPosition(0.5);
         drive.liftRightS.setPosition(1);
 
+        //start lift up movement
         drive.liftRight.setPower(0.75);
         drive.liftLeft.setPower(-0.75);
 
+        //move to infront of baskets for scoring
+        //update the position in poseition storage
         Actions.runBlocking(
                 drive.actionBuilder(new Pose2d(32.25,64, Math.PI))
                         .strafeToSplineHeading(new Vector2d(56, 56), 5*Math.PI/4)
@@ -91,6 +110,7 @@ public class BlueYellowV3 extends LinearOpMode {
         );
         PoseStorage.currentPose = drive.pose;
 
+        //finish moving lift to high basket height then hold
         while (((drive.liftLeft.getCurrentPosition() * -1) < 2900) && drive.liftRight.getCurrentPosition() < 2900){
             drive.liftRight.setPower(Math.max((2900-(drive.liftRight.getCurrentPosition())) * 0.01, 0.2));
             drive.liftLeft.setPower(Math.min((2900-(drive.liftLeft.getCurrentPosition() * -1)) * -0.01, -0.2));
@@ -98,23 +118,31 @@ public class BlueYellowV3 extends LinearOpMode {
         drive.liftRight.setPower(.001);
         drive.liftLeft.setPower(-.001);
 
+        //lift arms to scoring position
         drive.liftLeftS.setPosition(0.20);
         drive.liftRightS.setPosition(0.80);
         sleep(100);
 
+        //open then close claw
         drive.claw.setPosition(.45);
         sleep(250);
         drive.claw.setPosition(.8);
 
 
         //Sample 2 -> High
+        //this if is for all of pick up to scoring for sample number 2
+        //only changed in test to skip this
         if(true){
+            //extend intake most of the way out
             drive.horizontal.setPosition(0.3);
             drive.horizontal2.setPosition(0.5);
 
+            //lift arms into pick up hold position
             drive.liftLeftS.setPosition(0.875);
             drive.liftRightS.setPosition(1);
 
+            //movement to position to pick up middle spike mark sample
+            //update the position in poseition storage
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(56, 56, 5*Math.PI/4))
                             .waitSeconds(0.25)
@@ -123,9 +151,11 @@ public class BlueYellowV3 extends LinearOpMode {
             );
             PoseStorage.currentPose = drive.pose;
 
+            //limelight snapshot for later imaging changes if needed
             drive.limelight.captureSnapshot("Pick Up 1 Start (Mid)");
 
 
+            //lower intake
             drive.intakeLift.setPosition(0.98);
             drive.intakeLift2.setPosition(0.98);
 
@@ -772,4 +802,5 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
