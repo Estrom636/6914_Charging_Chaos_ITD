@@ -243,7 +243,9 @@ public class BlueYellowV3 extends LinearOpMode {
             drive.lightRight.setPosition(0.611);
             drive.lightLeft.setPosition(0.388);
 
+            //only happens if the sample was picked up and the lift functions
             if(!intakeMiss1 && !liftFail){
+                //reset lift encoders
                 drive.liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 drive.liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -252,42 +254,56 @@ public class BlueYellowV3 extends LinearOpMode {
                 drive.liftRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 drive.liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+                //get start time for transfer
                 double startTime2_1 = getRuntime();
                 while(!transferFail){
                     if(getRuntime() - startTime2_1 > 2){
                         if(drive.transfer.getDistance(DistanceUnit.MM) > 100){
+                            //if run time is longer then 2 seconds and there is nothing in the transfer area
+                            //set transferFail to true and close the claw
                             transferFail = true;
                             drive.claw.setPosition(.8);
                         }
                     }else {
                         if (drive.transfer.getDistance(DistanceUnit.MM) > 100){
+                            //if the time is less then 2 seconds and there is nothing in the transfer area
+                            //run the intake out well it is up in transfer position
                             if(drive.intakeLift.getPosition() < .6){
                                 drive.inRight.setPower(.75);
                                 drive.inLeft.setPower(-.75);
                             }
                         }else{
+                            //break out of while loop if the transfer happened in under 2 seconds
                             break;
                         }
                     }
                 }
+                //only runs if the sample transfered
                 if(!transferFail){
+                    //stop intake wheels
                     drive.inRight.setPower(0);
                     drive.inLeft.setPower(0);
                     sleep(10);
 
+                    //lower lift arms to pick up
                     drive.liftLeftS.setPosition(0.97);
                     drive.liftRightS.setPosition(0.95);
                     sleep(200);
 
+                    //close the claw
                     drive.claw.setPosition(.8);
                     sleep(200);
 
+                    //lift arm to prescore position
                     drive.liftLeftS.setPosition(0.5);
                     drive.liftRightS.setPosition(1);
 
+                    //start lift up movement
                     drive.liftRight.setPower(0.75);
                     drive.liftLeft.setPower(-0.75);
 
+                    //move to infront of baskets for scoring
+                    //update the position in poseition storage
                     Actions.runBlocking(
                             drive.actionBuilder(drive.pose)
                                     .strafeToSplineHeading(new Vector2d(56, 56), 5*Math.PI/4)
@@ -295,6 +311,7 @@ public class BlueYellowV3 extends LinearOpMode {
                     );
                     PoseStorage.currentPose = drive.pose;
 
+                    //finish moving lift to high basket height then hold
                     while (((drive.liftLeft.getCurrentPosition() * -1) < 3000) && drive.liftRight.getCurrentPosition() < 3000){
                         drive.liftRight.setPower(Math.max((3000-(drive.liftRight.getCurrentPosition())) * 0.01, 0.3));
                         drive.liftLeft.setPower(Math.min((3000-(drive.liftLeft.getCurrentPosition() * -1)) * -0.01, -0.3));
@@ -302,14 +319,17 @@ public class BlueYellowV3 extends LinearOpMode {
                     drive.liftRight.setPower(.001);
                     drive.liftLeft.setPower(-.001);
 
+                    //lift arms to scoring position
                     drive.liftLeftS.setPosition(0.20);
                     drive.liftRightS.setPosition(0.80);
                     sleep(100);
 
+                    //open then close claw
                     drive.claw.setPosition(.45);
                     sleep(250);
                     drive.claw.setPosition(.8);
 
+                    //lift arms into pick up hold position
                     sleep(50);
                     drive.liftLeftS.setPosition(0.875);
                     drive.liftRightS.setPosition(1);
@@ -822,6 +842,7 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
 
 
