@@ -879,8 +879,12 @@ public class BlueYellowV3 extends LinearOpMode {
         }
 
         //Park
+        //will only run if lift has not failed
         if(!liftFail){
+            //close claw
             drive.claw.setPosition(.8);
+            //move to in front of baskets
+            //update the position in position storage
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(56,56,5*Math.PI/4))
                             .strafeToSplineHeading(new Vector2d(48, 48), 5*Math.PI/4)
@@ -888,6 +892,7 @@ public class BlueYellowV3 extends LinearOpMode {
             );
             PoseStorage.currentPose = drive.pose;
 
+            //move lift to high for touching low bar
             if(((drive.liftLeft.getCurrentPosition() * -1) > 1500) && drive.liftRight.getCurrentPosition() > 1500){
                 while (((drive.liftLeft.getCurrentPosition() * -1) > 1500) && drive.liftRight.getCurrentPosition() > 1500){
                     drive.liftRight.setPower(-1);
@@ -900,13 +905,17 @@ public class BlueYellowV3 extends LinearOpMode {
                 }
             }
 
+            //set lift to hold
             drive.liftRight.setPower(.001);
             drive.liftLeft.setPower(-.001);
 
+            //set lift arms to touch position
             drive.liftLeftS.setPosition(0.2);
             drive.liftRightS.setPosition(1);
 
 
+            //move to position to back into the parking spot
+            //update the position in position storage
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(48,48, 5*Math.PI/4))
                             .strafeToSplineHeading(new Vector2d(35, 10), 2*Math.PI)
@@ -915,6 +924,9 @@ public class BlueYellowV3 extends LinearOpMode {
             );
             PoseStorage.currentPose = drive.pose;
 
+            //back up till the rear distance sensors are reading less than 2
+            //stop all movement
+            //update the position in position storage
             while((drive.rBack.getDistance(DistanceUnit.INCH) + drive.lBack.getDistance(DistanceUnit.INCH)) / 2 >= 2){
                 drive.setDrivePowers(new PoseVelocity2d(new Vector2d(-0.25, 0), 0));
                 drive.updatePoseEstimate();
@@ -922,6 +934,7 @@ public class BlueYellowV3 extends LinearOpMode {
             drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
             PoseStorage.currentPose = drive.pose;
 
+            //lower the lift to touch bar
             while (((drive.liftLeft.getCurrentPosition() * -1) > 1200) && drive.liftRight.getCurrentPosition() > 1200){
                 drive.liftRight.setPower(-1);
                 drive.liftLeft.setPower(1);
@@ -930,6 +943,10 @@ public class BlueYellowV3 extends LinearOpMode {
 
 
 
+        //only runs well the lift failed the the run time is less than 28sec
+        //update the position in position storage
+        //set the lights to white
+        //set the lift motors to 0
         while(liftFail && getRuntime() < 28){
             PoseStorage.currentPose = drive.pose;
             drive.lightRight.setPosition(1);
@@ -939,6 +956,7 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
 
 
