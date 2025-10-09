@@ -764,13 +764,18 @@ public class BlueYellowV3 extends LinearOpMode {
         }
 
         //Sample 5 -> High from Sub
+        //this was never run during comp
+        //this will only run if lift has not failed, transfer has not failed, and intake 1 and 2 were not missed
         if(false && !liftFail && !transferFail && !intakeMiss1 && !intakeMiss2){
+            //set lifts to lower
             drive.liftRight.setPower(-0.5);
             drive.liftLeft.setPower(0.5);
 
+            //extend intake out
             drive.horizontal.setPosition(0.2);
             drive.horizontal2.setPosition(0.4);
 
+            //move to pick up from in submersable
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(56, 56, 5*Math.PI/4))
                             .strafeToSplineHeading(new Vector2d(48, 14), Math.PI)
@@ -778,17 +783,25 @@ public class BlueYellowV3 extends LinearOpMode {
                             .build()
             );
 
+            //lower the intake
             drive.intakeLift.setPosition(1);
             drive.intakeLift2.setPosition(1);
 
+            //reset the check variables
             liftDown = false;
             intakeIn = false;
+            //get the start time for intaking
             double startTime4 = getRuntime();
+            //while for lowering the lift and intaking the sample from the ground
             while ((!liftDown || !intakeIn) && !liftFail && !intakeMiss4) {
                 if (getRuntime() - startTime4 > 10) {
+                    //if the time is longer then 10 seconds
+                    //check if lift is still up if yes then set liftFail to true
                     if (!liftDown) {
                         liftFail = true;
                     }
+                    //check if the intake is in meaning the nothing has been picked up
+                    //if yes set intakeMiss1 to true, stop movement, lift and retract intake
                     if (!intakeIn) {
                         intakeMiss4 = true;
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
@@ -801,6 +814,8 @@ public class BlueYellowV3 extends LinearOpMode {
                         drive.horizontal2.setPosition(0.8);
                     }
                 } else {
+                    //if the time is less then 10 seconds
+                    //move lift all the way down then open claw and set liftDown to true
                     if (!drive.rightT.isPressed() && !drive.leftT.isPressed()) {
                         drive.liftRight.setPower(-1);
                         drive.liftLeft.setPower(1);
@@ -812,17 +827,23 @@ public class BlueYellowV3 extends LinearOpMode {
                     }
 
                     if (!(drive.inCol.red() > 200 || drive.inCol.blue() > 200)) {
+                        //if color sensor does not read color
+                        //set intake wheel to pull in
                         drive.inRight.setPower(-1);
                         drive.inLeft.setPower(1);
+                        //move forward with changing the angle based in the limelight value
+                        //update the position in position storage
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0.25, 0), 0));
                         drive.updatePoseEstimate();
                     } else {
+                        //if something is in the intake
+                        //stop all movement, lift and retract intake, and set intakeIn to true
                         drive.setDrivePowers(new PoseVelocity2d(new Vector2d(0, 0), 0));
                         drive.inRight.setPower(0);
                         drive.inLeft.setPower(0);
                         drive.intakeLift.setPosition(0.48);
                         drive.intakeLift2.setPosition(0.48);
-                        sleep(200);
+                        sleep(200); //wait before pulling intake back
                         drive.horizontal.setPosition(0.6);
                         drive.horizontal2.setPosition(0.8);
                         intakeIn = true;
@@ -830,7 +851,9 @@ public class BlueYellowV3 extends LinearOpMode {
                 }
             }
 
+            //only happens if the sample was picked up and the lift functions
             if (!intakeMiss4 && !liftFail) {
+                //reset lift encoders
                 drive.liftRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 drive.liftLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -840,39 +863,51 @@ public class BlueYellowV3 extends LinearOpMode {
                 drive.liftLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
+                //get start time for transfer
                 double startTime4_1 = getRuntime();
                 while (!transferFail) {
                     if (getRuntime() - startTime4_1 > 2) {
                         if (drive.transfer.getDistance(DistanceUnit.MM) > 100) {
+                            //if run time is longer then 2 seconds and there is nothing in the transfer area
+                            //set transferFail to true and close the claw
                             transferFail = true;
                             drive.claw.setPosition(.8);
                         }
                     } else {
                         if (drive.transfer.getDistance(DistanceUnit.MM) > 100) {
+                            //if the time is less then 2 seconds and there is nothing in the transfer area
+                            //run the intake out well it is up in transfer position
                             if (drive.intakeLift.getPosition() < .6) {
                                 drive.inRight.setPower(.75);
                                 drive.inLeft.setPower(-.75);
                             }
                         } else {
+                            //break out of while loop if the transfer happened in under 2 seconds
                             break;
                         }
                     }
                 }
+                //only runs if the sample transfered
                 if (!transferFail) {
+                    //stop intake wheels
                     drive.inRight.setPower(0);
                     drive.inLeft.setPower(0);
                     sleep(10);
 
+                    //lower lift arms to pick up
                     drive.liftLeftS.setPosition(0.975);
                     drive.liftRightS.setPosition(0.95);
                     sleep(200);
 
+                    //close the claw
                     drive.claw.setPosition(.8);
                     sleep(200);
 
+                    //lift arm to prescore position
                     drive.liftLeftS.setPosition(0.5);
                     drive.liftRightS.setPosition(1);
 
+                    //lift fail to true because this was not finished to be able to go place in basket
                     liftFail = true;
                 }
             }
@@ -956,6 +991,7 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
 
 
