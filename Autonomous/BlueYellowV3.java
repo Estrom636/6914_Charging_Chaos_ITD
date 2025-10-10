@@ -724,7 +724,7 @@ public class BlueYellowV3 extends LinearOpMode {
                     drive.liftLeftS.setPosition(0.5);
                     drive.liftRightS.setPosition(1);
 
-                    //start lift up movement//start lift up movement
+                    //start lift up movement
                     drive.liftRight.setPower(0.75);
                     drive.liftLeft.setPower(-0.75);
 
@@ -991,6 +991,7 @@ public class BlueYellowV3 extends LinearOpMode {
         }
     }
 }
+
 
 
 
